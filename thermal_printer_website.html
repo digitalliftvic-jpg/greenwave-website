@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThermalPrint Pro - Portable Thermal Printer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f9f9f9;
+        }
+
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #666;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #333;
+        }
+
+        .hero {
+            background: #fff;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 38px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #333;
+            text-align: left;
+        }
+
+        .hero-text p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .hero-image-box {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .printer-box {
+            width: 160px;
+            height: 120px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateY(0deg); }
+            50% { transform: translateY(-15px) rotateY(10deg); }
+        }
+
+        .printer-box::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            right: 30px;
+            height: 60px;
+            background: #1a252f;
+            border-radius: 4px;
+            border: 2px solid #3d5a73;
+        }
+
+        .printer-box::after {
+            content: '';
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 8px;
+            background: #3d5a73;
+            border-radius: 4px;
+        }
+
+        .printer-button {
+            position: absolute;
+            bottom: 12px;
+            right: 15px;
+            width: 24px;
+            height: 24px;
+            background: #e74c3c;
+            border-radius: 50%;
+            border: 2px solid #c0392b;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #0066cc;
+            color: #fff;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cta-button:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+        }
+
+        .cta-button:active {
+            transform: translateY(0px);
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #333;
+        }
+
+        .highlight-box {
+            background: #e3f2fd;
+            color: #0066cc;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            text-align: center;
+            border: 1px solid #90caf9;
+        }
+
+        .highlight-box h2 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box p {
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .advantage-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .advantage-item:hover {
+            border-color: #0066cc;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .advantage-icon {
+            font-size: 36px;
+            flex-shrink: 0;
+            min-width: 50px;
+        }
+
+        .advantage-content h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .advantage-content p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .specs-container {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+        }
+
+        .spec-item {
+            border-left: 3px solid #0066cc;
+            padding-left: 1.5rem;
+        }
+
+        .spec-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .spec-value {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .connectivity-section {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .connectivity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .connectivity-item {
+            text-align: center;
+        }
+
+        .connectivity-icon {
+            font-size: 44px;
+            margin-bottom: 1rem;
+        }
+
+        .connectivity-item h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .connectivity-item p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .use-case-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .use-case-card:hover {
+            border-color: #0066cc;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .use-case-icon {
+            font-size: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+
+        .use-case-card p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .comparison {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 4rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f5f5f5;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+            font-size: 13px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check {
+            color: #4caf50;
+            font-weight: 500;
+        }
+
+        .cross {
+            color: #999;
+        }
+
+        .pricing {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        .price-display {
+            font-size: 48px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .price-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 2rem;
+        }
+
+        .includes-list {
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto 2rem;
+        }
+
+        .includes-list li {
+            list-style: none;
+            padding: 0.5rem 0;
+            color: #666;
+            font-size: 13px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .includes-list li:before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: 500;
+            margin-right: 0.75rem;
+        }
+
+        footer {
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            padding: 3rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            color: #333;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: #333;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #0066cc;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-text h1 {
+                text-align: center;
+            }
+            
+            .hero-text p {
+                text-align: center;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 12px;
+            }
+
+            .hero-text h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <div class="logo">ThermalPrint Pro</div>
+        <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#specs">Specs</a></li>
+            <li><a href="#uses">Use cases</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>ThermalPrint Pro</h1>
+            <p>Compact portable thermal printer for instant printing on the go. No ink, toner, or ribbon needed.</p>
+            <button class="cta-button" onclick="alert('Learn more about ThermalPrint Pro')">Learn more</button>
+        </div>
+        <div class="hero-image-box">
+            <div class="printer-box">
+                <div class="printer-button"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="highlight-box">
+        <h2>Pocket-sized printing power</h2>
+        <p>Compact box design fits easily in your backpack or briefcase. Direct thermal technology eliminates expensive consumables. Perfect for travel, business trips, and professionals on the move.</p>
+    </div>
+</section>
+
+<section class="section" id="features">
+    <h2 class="section-title">Key advantages</h2>
+    <div class="advantages-grid">
+        <div class="advantage-item">
+            <div class="advantage-icon">⚡</div>
+            <div class="advantage-content">
+                <h3>No consumables needed</h3>
+                <p>Direct thermal printing eliminates expensive ink cartridges, toner, or ribbons. Lower total cost of ownership.</p>
+            </div>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">📦</div>
+            <div class="advantage-content">
+                <h3>Compact box design</h3>
+                <p>Small, lightweight, portable unit. Fits easily in a backpack, briefcase, or travel bag.</p>
+            </div>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">📱</div>
+            <div class="advantage-content">
+                <h3>Bluetooth + USB</h3>
+                <p>Easy setup. Connect to smart devices via Bluetooth or computers via USB. Seamless connectivity.</p>
+            </div>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">📄</div>
+            <div class="advantage-content">
+                <h3>A4 & Letter paper</h3>
+                <p>Prints on standard thermal paper sizes. Compatible with A4 and Letter format documents.</p>
+            </div>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">🔋</div>
+            <div class="advantage-content">
+                <h3>1200mAh battery</h3>
+                <p>Extended battery capacity for multiple printing sessions. Print anywhere without power outlet.</p>
+            </div>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">🎯</div>
+            <div class="advantage-content">
+                <h3>203 DPI quality</h3>
+                <p>Clear, sharp output for documents, labels, receipts, and important paperwork.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="specs">
+    <h2 class="section-title">Technical specifications</h2>
+    <div class="specs-container">
+        <div class="specs-grid">
+            <div class="spec-item">
+                <div class="spec-label">Print type</div>
+                <div class="spec-value">Direct thermal</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Print resolution</div>
+                <div class="spec-value">203 dpi</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Battery capacity</div>
+                <div class="spec-value">1200 mAh</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Paper sizes</div>
+                <div class="spec-value">A4, Letter</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Connectivity</div>
+                <div class="spec-value">Bluetooth, USB</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Consumables</div>
+                <div class="spec-value">None required</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Easy connectivity</h2>
+    <div class="connectivity-section">
+        <div class="connectivity-grid">
+            <div class="connectivity-item">
+                <div class="connectivity-icon">📱</div>
+                <h3>Bluetooth setup</h3>
+                <p>Wireless connection to smartphones and tablets. Print documents directly from your device.</p>
+            </div>
+            <div class="connectivity-item">
+                <div class="connectivity-icon">🖥️</div>
+                <h3>USB connection</h3>
+                <p>Direct connection to computers and laptops. Plug and play functionality with simple drivers.</p>
+            </div>
+            <div class="connectivity-item">
+                <div class="connectivity-icon">⚙️</div>
+                <h3>Simple setup</h3>
+                <p>Fast pairing process. Works out of the box. No complex configuration needed.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="uses">
+    <h2 class="section-title">Perfect for</h2>
+    <div class="use-cases">
+        <div class="use-case-card">
+            <div class="use-case-icon">✈️</div>
+            <h3>Travel</h3>
+            <p>Lightweight and portable. Print travel documents, tickets, or receipts while traveling.</p>
+        </div>
+        <div class="use-case-card">
+            <div class="use-case-icon">💼</div>
+            <h3>Business trips</h3>
+            <p>Professional printing for reports, contracts, and presentations on the road.</p>
+        </div>
+        <div class="use-case-card">
+            <div class="use-case-icon">📊</div>
+            <h3>Field work</h3>
+            <p>Ideal for sales teams, inspectors, and field agents needing instant on-site printing.</p>
+        </div>
+        <div class="use-case-card">
+            <div class="use-case-icon">🏢</div>
+            <h3>Small offices</h3>
+            <p>Cost-effective printing solution with zero cartridge replacement hassles.</p>
+        </div>
+        <div class="use-case-card">
+            <div class="use-case-icon">📦</div>
+            <h3>Labels & receipts</h3>
+            <p>Perfect for shipping labels, invoices, receipts, and important documents.</p>
+        </div>
+        <div class="use-case-card">
+            <div class="use-case-icon">🎓</div>
+            <h3>Education</h3>
+            <p>Portable printing solution for classrooms, field trips, and educational events.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Why choose ThermalPrint Pro</h2>
+    <div class="comparison">
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>ThermalPrint Pro</th>
+                    <th>Inkjet printer</th>
+                    <th>Laser printer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Portable/compact</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>Battery powered</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>No consumables</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                    <td class="cross">✗</td>
+                </tr>
+                <tr>
+                    <td>Bluetooth ready</td>
+                    <td class="check">✓</td>
+                    <td>Limited</td>
+                    <td>Limited</td>
+                </tr>
+                <tr>
+                    <td>Lowest operating cost</td>
+                    <td class="check">✓</td>
+                    <td>High (cartridges)</td>
+                    <td>Medium (toner)</td>
+                </tr>
+                <tr>
+                    <td>Easy to carry</td>
+                    <td class="check">✓</td>
+                    <td class="cross">✗</td>
+                    <td class="cross">✗</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="section" id="pricing">
+    <h2 class="section-title">Pricing</h2>
+    <div class="pricing">
+        <div class="badge">Limited time offer</div>
+        <div class="price-display">$149.99</div>
+        <p class="price-desc">Complete ThermalPrint Pro package</p>
+        <ul class="includes-list">
+            <li>Compact thermal printer unit</li>
+            <li>1200mAh rechargeable battery</li>
+            <li>USB charging cable</li>
+            <li>Bluetooth + USB connectivity</li>
+            <li>Driver software included</li>
+            <li>Quick start guide</li>
+            <li>12-month warranty</li>
+        </ul>
+        <button class="cta-button" onclick="alert('Proceeding to order ThermalPrint Pro')">Order now</button>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Thermal paper supplies</h2>
+    <div class="advantages-grid">
+        <div class="advantage-item">
+            <div class="advantage-icon">📄</div>
+            <div class="advantage-content">
+                <h3>A4 thermal paper</h3>
+                <p>High-quality 80gsm thermal paper. 100 sheets per roll. $4.99</p>
+            </div>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">📋</div>
+            <div class="advantage-content">
+                <h3>Letter size paper</h3>
+                <p>Standard US Letter thermal paper. 100 sheets per roll. $4.99</p>
+            </div>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">🏷️</div>
+            <div class="advantage-content">
+                <h3>Thermal labels</h3>
+                <p>4x6 thermal labels for shipping and logistics. 250 sheets per roll. $9.99</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Product</h4>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#specs">Specifications</a></li>
+                <li><a href="#uses">Use cases</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="#">Help center</a></li>
+                <li><a href="#">Drivers</a></li>
+                <li><a href="#">Documentation</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Shop</h4>
+            <ul>
+                <li><a href="#">Buy printer</a></li>
+                <li><a href="#">Thermal paper</a></li>
+                <li><a href="#">Accessories</a></li>
+                <li><a href="#">Bulk orders</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press kit</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 ThermalPrint Pro. All rights reserved. | Portable thermal printing made simple</p>
+    </div>
+</footer>
+
+</body>
+</html>
